@@ -1,16 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Employee;
 
-package Appraisal;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 /**
  *
- * @author Lanka Achalaesh
- * edit:- 23/11/2016 08:46 PM
+ * @author MSLCELTP1800
  */
 public class EmpDAO {
-    //for appraisals we need ID, BAND, 
-    private int empID,empRating;
-    private String empName,location;
+   private int empID;
+   private String empName;
+    private String empGender;
     private double empSalary;
-    private String empBand;
+
+    public EmpDAO(int empID, String empName, String empGender, double empSalary) {
+        this.empID = empID;
+        this.empName = empName;
+        this.empGender = empGender;
+        this.empSalary = empSalary;
+    }
+    public EmpDAO(){
+        
+    }
 
     /**
      * @return the empID
@@ -24,20 +40,6 @@ public class EmpDAO {
      */
     public void setEmpID(int empID) {
         this.empID = empID;
-    }
-
-    /**
-     * @return the empRating
-     */
-    public int getEmpRating() {
-        return empRating;
-    }
-
-    /**
-     * @param empRating the empRating to set
-     */
-    public void setEmpRating(int empRating) {
-        this.empRating = empRating;
     }
 
     /**
@@ -55,17 +57,17 @@ public class EmpDAO {
     }
 
     /**
-     * @return the location
+     * @return the empGender
      */
-    public String getLocation() {
-        return location;
+    public String getEmpGender() {
+        return empGender;
     }
 
     /**
-     * @param location the location to set
+     * @param empGender the empGender to set
      */
-    public void setLocation(String location) {
-        this.location = location;
+    public void setEmpGender(String empGender) {
+        this.empGender = empGender;
     }
 
     /**
@@ -81,19 +83,40 @@ public class EmpDAO {
     public void setEmpSalary(double empSalary) {
         this.empSalary = empSalary;
     }
-
-    /**
-     * @return the empBand
-     */
-    public String getEmpBand() {
-        return empBand;
+    public boolean insert(){
+        Session session = HibernateUtil.getSessionFactory();
+        Transaction transaction = session.beginTransaction();
+        session.save(this);
+        transaction.commit();
+        return true;
+    }
+    public boolean update(int oid){
+        Session session = HibernateUtil.getSessionFactory();
+        Transaction transaction = session.beginTransaction();
+        EmpDAO e = (EmpDAO) session.get(EmpDAO.class, oid);
+        session.evict(e);
+        e.setEmpGender(this.empGender);
+        e.setEmpID(this.empID);
+        e.setEmpName(this.empName);
+        e.setEmpSalary(this.empSalary);
+        session.update(e);
+        transaction.commit();
+        return true;
+    }
+    public static EmpDAO display(int id){
+        Session session = HibernateUtil.getSessionFactory();
+        Transaction transaction = session.beginTransaction();
+        EmpDAO e = (EmpDAO) session.get(EmpDAO.class, id);
+        System.out.println("Here!!!!!---------------->"+e.empName);
+        transaction.commit();
+        return e;
+        
     }
 
-    /**
-     * @param empBand the empBand to set
-     */
-    public void setEmpBand(String empBand) {
-        this.empBand = empBand;
+    @Override
+    public String toString() {
+        return "EmpDAO{" + "empID=" + empID + ", empName=" + empName + ", empGender=" + empGender + ", empSalary=" + empSalary + '}';
     }
+   
     
 }
