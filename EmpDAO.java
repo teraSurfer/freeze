@@ -102,7 +102,7 @@ public class EmpDAO {
     public boolean update(int oid){
         Session session = HibernateUtil.getSessionFactory();
         Transaction transaction = session.beginTransaction();
-        EmpDAO e = (EmpDAO) session.get(EmpDAO.class, oid);
+        EmpDAO e = (EmpDAO) session.get(EmpDAO.class, this.empID);
         session.evict(e);
         e.setEmpGender(this.empGender);
         e.setEmpID(this.getEmpID());
